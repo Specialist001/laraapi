@@ -15,7 +15,12 @@ class CreateGamesTable extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->tinyInteger('complexity');
+            $table->boolean('isActive');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

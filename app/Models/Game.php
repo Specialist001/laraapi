@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['title', 'description', 'complexity', 'isActive'];
+    protected $hidden = ['deleted_at'];
 }
