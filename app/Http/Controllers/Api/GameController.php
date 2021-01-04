@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\GameRequest;
 use App\Http\Resources\GameResource;
-use App\Http\Responses\StatusResponse;
 use App\Models\Game;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class GameController extends BaseController
@@ -20,7 +18,7 @@ class GameController extends BaseController
     {
         $games = Game::all();
         if ($games->isEmpty()) {
-            return $this->errorResponse('Games Not Found', 404);
+            return $this->notFoundResponse();
         }
 
         return $this->successResponse(GameResource::collection($games),'All games');
@@ -62,7 +60,7 @@ class GameController extends BaseController
     {
         $game = Game::find($id);
         if (!$game) {
-            return $this->errorResponse('Game Not Found', 404);
+            return $this->notFoundResponse();
         }
 
         return $this->successResponse(GameResource::make($game),'Game');
@@ -90,12 +88,12 @@ class GameController extends BaseController
     {
         $game = Game::find($id);
         if (!$game) {
-            return $this->errorResponse('Game Not Found', 404);
+            return $this->notFoundResponse();
         }
 
         $game->fill($request->validated());
         $game->save();
-        return $this->successResponse(GameResource::collection($game),'Game updated');
+        return $this->successResponse(GameResource::make($game),'Game updated');
     }
 
     /**
@@ -108,11 +106,16 @@ class GameController extends BaseController
     {
         $game = Game::find($id);
         if (!$game) {
-            return $this->errorResponse('Game Not Found', 404);
+            return $this->notFoundResponse();
         }
         if($game->delete()) {
             return $this->successResponse(200,'Game deleted');
         }
+        return $this->notFoundResponse();
+    }
+    
+    private function notFoundResponse()
+    {
         return $this->errorResponse('Game Not Found', 404);
     }
 }
