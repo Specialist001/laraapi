@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\GameController;
@@ -20,9 +21,17 @@ Route::apiResource('/games', GameController::class);
 //Route::resource('/games', GameController::class)->only([
 //    'index', 'show', 'store', 'update', 'destroy'
 //]);
+Route::group([
+    'prefix' => 'auth',
+    'as' => 'auth.'
+], function () {
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])->name('api.logout');
-    Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login'])->name('api.login');
-    Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'register'])->name('api.register');
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    });
 });
+
+
+
