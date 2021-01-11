@@ -21,11 +21,18 @@ class UserRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ];
+        switch ($this->route()->getActionMethod()) {
+            case 'register':
+                return [
+                    'email' => 'required|string|email|max:255|unique:users',
+                    'password' => 'required|string|min:6|confirmed',
+                ];
+            case 'login':
+                return [
+                    'email' => 'required|string|email|max:255',
+                    'password' => 'required|string|min:6',
+                ];
+        }
 
     }
 }

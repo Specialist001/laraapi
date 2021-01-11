@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\GameController;
 |
 */
 
-Route::apiResource('/games', GameController::class);
+
 
 //Route::resource('/games', GameController::class)->only([
 //    'index', 'show', 'store', 'update', 'destroy'
@@ -33,5 +33,8 @@ Route::group([
     });
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('/games', GameController::class);
+});
 
 
